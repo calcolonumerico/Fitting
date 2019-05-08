@@ -169,10 +169,21 @@ hold on;
 plot(points(1,:),points(2,:),'o');
  title("Lettera F minuscola in corsivo");
 axis([0 6 0 4]);
+%%
+figure(10)
+t=linspace(0,6*pi,50);
+x1=(t.^2+t+2000).*sin(t);
+y1=(t.^2+t+2000).*cos(t);
+z1=50.*t;
+xyz=[x1;y1;z1];
+plot3(xyz(1,:),xyz(2,:),xyz(3,:),'ro');
+title("Spirale parametrica");
+hold on
+fnplt(cscvn(xyz),'g',2);
 %% Esempio 9- Interpolazione bidimensionale
 [X,Y] = meshgrid(-3:3);
 V = peaks(X,Y);
-figure(10)
+figure(11)
 subplot(2,2,1);
 surf(X,Y,V)
 title('Campionamento Iniziale');
@@ -193,7 +204,7 @@ title('Interpolazione con Spline');
 load sunspot.dat
 x=sunspot(:,1);
 y=sunspot(:,2);
-figure(11)
+figure(12)
 subplot(2,1,1)
 plot(x,y,'-o','MarkerFaceColor','r','MarkerSize',4);
 title('Sunspot index');
@@ -210,7 +221,7 @@ title('Smoothing Dati');
 plot(x,y,'*',t,s,'r',t,ss,'g','MarkerSize',3,'LineWidth',2);
 legend('Dati','lineare','pol grado 2','Location','NorthWest')
 %% Esempio 11-Smoothing - Spline Smoothing
-figure(12)
+figure(13)
 x=-4*pi:0.1:4*pi;
 t=-4*pi:0.005:4*pi;
 %viene perturbata la funzione sinc(x)
@@ -234,7 +245,7 @@ plot(x,y,'*c',t,ys1,'r',t,ys2,'b',x,y0,'g','LineWidth',2,'MarkerSize',4);
 title("Spline con p scelto personalmente.")
 legend('Dati', 'p = 0.7', 'p = 0.2','sinc(x)');
 %% Esempio 12- Smoothing - Confronto spline cubica retta e polinomimo
-figure(12)
+figure(14)
 x=-4*pi:0.1:4*pi;
 t=-4*pi:0.005:4*pi;
 y=(sin(x)./x)+1/4*randn(1,length(x));
@@ -254,11 +265,11 @@ plot(t,ys2,'b','LineWidth',2)
 title("Smoothing con spline cubica , retta e polinomio dei minimi quadrati")
 legend('Punti','sinc(x)','retta','polinomio II grado','spline cubica');
 %% Esempio 13- Smoothing - Confronto spline cubica retta e polinomimo
-figure(13)
+figure(15)
 load sunspot.dat
 x=sunspot(:,1);
 y=sunspot(:,2);
-figure(13)
+figure(16)
 plot(x,y,'o')
 hold on;
 t=linspace(1700,1988);
@@ -274,7 +285,7 @@ plot(t,ys2,'b','LineWidth',2)
 title("Smoothing con spline cubica , retta e polinomio dei minimi quadrati")
 legend('Punti','retta','polinomio II grado','spline cubica');
 %% Esempio 14- Smoothing - Spline parametrica
-figure(14)
+figure(17)
 t=linspace(0,300,600);
 n=length(t);
 x=-35*cos(t)+65*cos(-.35*t)+rand(1,n);
@@ -291,6 +302,7 @@ axis([-110 110 -110 120]);
 %% Esempio 15 -Smoothing - estrapolazione
 x=(1:.1:3.5);
 y=log(x);
+figure(19)
 hold on
 plot(x,y,'bo','MarkerFaceColor','g','MarkerSize',8)
 p=polyfit(x,y,2);
@@ -306,13 +318,13 @@ axis([1 8 0 1.5])
 
 %% Esempio 16- Smoothing - previsione
 x=1:15;
-%Minuti su venditori online mondiali per quadrimestre su vari devices
+%Dati
 tablet=[7 7 7 7 7 7 8 8 7 5 5 5 5 5 5];
 smartphone=[6 5 6 6 5 5 6 6 5 4 4 4 4 4 4];
 desktop=[6 6 7 7 6 6 7 7 6 5 5 5 5 5 6];
 %Andamento negli anni
 t=linspace(0,20);
-figure(16)
+figure(20)
 c1=polyfit(x,tablet,1);
 v1=polyval(c1,t);
 subplot(3,1,1)
@@ -326,7 +338,7 @@ v3=polyval(c3,t);
 subplot(3,1,3)
 plot(x,desktop,'o',t,v3,'LineWidth',3,'MarkerSize',4),title ('Desktop');
 %Previsione 2019
-figure(17)
+figure(21)
 first=[tablet(1),smartphone(1),desktop(1)];
 pro=[v1(100),v2(100),v3(100)];
 subplot(1,2,1)
@@ -343,7 +355,7 @@ subplot(1,3,1)
 surf(X,Y,V)
 title("Superifcie di partenza");
 noisy=V+(rand(size(V))+.5);
-figure(20)
+figure(22)
 subplot(1,3,2)
 surf(X,Y,noisy)
 title("Superifcie rumorosa");
@@ -352,7 +364,7 @@ pp=csaps(x,noisy,.996);
 smooth=ppval(pp,x);
 surf(X,Y,smooth)
 title("Superifcie dopo lo smoothing");
-%% Esempio 18 -Modifica di immagini (Ingrandimento/Contrasto)
+%% Esempio 18 -Modifica di immagini
 I=imread('ape.jpg');
 % Salvataggio dimensioni originali
 [r,c,v] = size(I);
@@ -372,10 +384,11 @@ NEW_I(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'spline'))
 NEW_I_L(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'linear'));
 NEW_I_C(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'cubic'));
 end
-figure(19)
+figure(23)
 subplot(2,2,1),imshow(I),title('Immagine Originale');
 subplot(2,2,2),imshow(NEW_I),title('Interpolazione Spline');
 subplot(2,2,3),imshow(NEW_I_L),title('Interpolazione Lineare');
 subplot(2,2,4),imshow(NEW_I_C),title('Interpolazione Cubica');
 
-openfig("zoom");
+I2=imread('zoom.jpg');
+figure(24),imshow(I2),title('Immagini zoomate');
