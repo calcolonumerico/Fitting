@@ -364,7 +364,28 @@ pp=csaps(x,noisy,.996);
 smooth=ppval(pp,x);
 surf(X,Y,smooth)
 title("Superifcie dopo lo smoothing");
-%% Esempio 18 -Modifica di immagini
+%% Esempio 18 -Fitting di nodi non uniformi
+xy=-2.5+5*gallery('uniformdata',[200 2],0);
+x=xy(:,1);
+y=xy(:,2);
+v=sqrt(x.^2+y.^4);
+F=scatteredInterpolant(x,y,v);
+t=-2:.25:2;
+[xq,yq]=meshgrid(t,t);
+vq=F(xq,yq);
+figure(23)
+subplot(1,2,1)
+mesh(xq,yq,vq);
+title("Punti di interpolazione");
+hold on;
+plot3(x,y,v,'o');
+axis([-2 2 -2 2 0 6]);
+subplot(1,2,2)
+surfl(xq,yq,vq);
+title("Interpolante");
+shading interp;
+axis([-2 2 -2 2 0 6]);
+%% Esempio 19 -Modifica di immagini
 I=imread('ape.jpg');
 % Salvataggio dimensioni originali
 [r,c,v] = size(I);
@@ -384,16 +405,16 @@ NEW_I(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'spline'))
 NEW_I_L(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'linear'));
 NEW_I_C(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'cubic'));
 end
-figure(23)
+figure(24)
 subplot(2,2,1),imshow(I),title('Immagine Originale');
 subplot(2,2,2),imshow(NEW_I),title('Interpolazione Spline');
 subplot(2,2,3),imshow(NEW_I_L),title('Interpolazione Lineare');
 subplot(2,2,4),imshow(NEW_I_C),title('Interpolazione Cubica');
 
 I2=imread('zoom.jpg');
-figure(24),imshow(I2),title('Immagini zoomate');
+figure(25),imshow(I2),title('Immagini zoomate');
 
-%% Esempio 19 -Modifica di immagini- Aumento Qualità
+%% Esempio 20 -Modifica di immagini- Aumento Qualità
 I=imread('gioconda_2.png');
 % Salvataggio dimensioni originali
 [r,c,v] = size(I);
@@ -411,7 +432,7 @@ for i=1:3
 NEW_I(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'spline'));
 NEW_I_L(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'linear'));
 end
-figure(25)
+figure(26)
 set(gcf, 'Position',  [400, 200, 1000, 500])
 subplot(1,3,1),imshow(I),title('Immagine Originale');
 subplot(1,3,2),imshow(NEW_I_L),title('Interpolazione Lineare');
