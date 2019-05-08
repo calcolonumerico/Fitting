@@ -392,3 +392,28 @@ subplot(2,2,4),imshow(NEW_I_C),title('Interpolazione Cubica');
 
 I2=imread('zoom.jpg');
 figure(24),imshow(I2),title('Immagini zoomate');
+
+%% Esempio 19 -Modifica di immagini- Aumento Qualità
+I=imread('gioconda_2.png');
+% Salvataggio dimensioni originali
+[r,c,v] = size(I);
+% Salvataggio griglia originale
+old_x = 1:c; 
+old_y = 1:r;
+% Creiamo una griglia con dimensioni dieci volte più fitta
+new_x = linspace(1,c,20*c)';
+new_y = linspace(1,r,20*r);
+% Preallochiamo le componenti RGB
+NEW_I = zeros(20*r,20*c,v,'uint8');
+NEW_I_L = zeros(20*r,20*c,v,'uint8');
+% Interpolazione componenti RGB
+for i=1:3
+NEW_I(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'spline'));
+NEW_I_L(:,:,i) = uint8(interp2(old_x,old_y,double(I(:,:,i)),new_x,new_y,'linear'));
+end
+figure(25)
+set(gcf, 'Position',  [400, 200, 1000, 500])
+subplot(1,3,1),imshow(I),title('Immagine Originale');
+subplot(1,3,2),imshow(NEW_I_L),title('Interpolazione Lineare');
+subplot(1,3,3),imshow(NEW_I),title('Interpolazione Spline');
+
